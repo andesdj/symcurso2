@@ -285,6 +285,9 @@ class VideoController extends Controller {
 	public function videosAction(){
 		
 		
+		
+		
+		
 	//Videos Action 	
 	}
 
