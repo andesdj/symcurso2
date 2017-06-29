@@ -275,7 +275,17 @@ class VideoController extends Controller {
 		}
 
 		return $helpers->json($data);
-//Upload Action Action	
+//Upload Action 
+	}
+	
+	
+	
+	
+	
+	public function videosAction(){
+		
+		
+	//Videos Action 	
 	}
 
 //FIN CLASS
