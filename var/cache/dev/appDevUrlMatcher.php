@@ -221,6 +221,53 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
             }
 
+            if (0 === strpos($pathinfo, '/video/l')) {
+                // video_list
+                if ($pathinfo === '/video/list') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_video_list;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\VideoController::videosAction',  'id' => NULL,  '_route' => 'video_list',);
+                }
+                not_video_list:
+
+                // video_last_videos
+                if ($pathinfo === '/video/last-videos') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_video_last_videos;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\VideoController::lastVideosAction',  '_route' => 'video_last_videos',);
+                }
+                not_video_last_videos:
+
+            }
+
+            // video_detail
+            if (0 === strpos($pathinfo, '/video/detail') && preg_match('#^/video/detail(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_video_detail;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'video_detail')), array (  '_controller' => 'AppBundle\\Controller\\VideoController::videoAction',  'id' => NULL,));
+            }
+            not_video_detail:
+
+            // video_search
+            if (0 === strpos($pathinfo, '/video/search') && preg_match('#^/video/search(?:/(?P<search>[^/]++))?$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_video_search;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'video_search')), array (  '_controller' => 'AppBundle\\Controller\\VideoController::searchAction',  'search' => NULL,));
+            }
+            not_video_search:
+
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

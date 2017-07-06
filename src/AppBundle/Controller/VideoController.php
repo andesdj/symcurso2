@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BackendBundle\Entity\User;
 use BackendBundle\Entity\Video;
+use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 
 class VideoController extends Controller {
 
@@ -279,17 +280,127 @@ class VideoController extends Controller {
 	}
 	
 	
+	public function videosAction(Request $request){
+			$helpers = $this->get("app.helpers");
+		
+			$em = $this->getDoctrine()->getManager();
+			//$video = $em->getRepository("BackendBundle:Video")->findAll();
+			$dql= "SELECT v FROM BackendBundle:Video v ORDER BY v.id DESC";
 	
-	
-	
-	public function videosAction(){
-		
-		
-		
-		
-		
+			$query=$em->createQuery($dql);
+			$page=$request->query->getInt("page",	1);
+			$paginator =	$this->get("knp_paginator");
+			$items_pp=6;
+			
+			$pagination= $paginator->paginate($query,$page,$items_pp);
+			$total_items=$pagination->getTotalItemCount();
+			
+			$data=array(
+				"status"=>"success",
+				"total_items"=>$total_items,
+				"page_actual"=>$page,
+				"items_per_page"=>$items_pp,
+				"total_pages"=>ceil($total_items/$items_pp),
+				"data"=>$pagination
+			);
+			
+			return $helpers->json($data);
+			
 	//Videos Action 	
 	}
+	
+	
+	public function lastVideosAction(Request $request){
+		$helpers = $this->get("app.helpers");
+		$em = $this->getDoctrine()->getManager();
+		$dql= "SELECT v FROM BackendBundle:Video v ORDER BY v.createdAt DESC";
+		$query=$em->createQuery($dql)->setMaxResults(5);
+		$videos=$query->getResult();
+
+
+		$data= array(
+			"status"=>"success",
+			"data"=>$videos
+		);
+
+
+		return $helpers->json($data);
+		
+		//lastVideosAction
+		}
+
+		
+		public function videoAction(Request $request, $id=null){
+			$helpers = $this->get("app.helpers");
+			$em = $this->getDoctrine()->getManager();
+			$video=$em->getRepository("BackendBundle:Video")->findOneBy(array(
+				"id"=>$id
+			));
+
+			
+			if($video){
+				$data=array(
+				"status"=>"success",
+				"code"=>"200",
+				"data"	=>$video
+					
+				);
+				
+			} else {
+				$data=array(
+				"status"=>"error",
+				"code"=>"400",
+				"msg"=>"Video doesn't Exist"
+			);
+				
+			}
+			
+			
+		return  $helpers->json($data);
+			
+		//VideoAction	
+		}
+
+
+		public function searchAction(Request $request, $search = null){
+			$helpers = $this->get("app.helpers");
+
+			$em = $this->getDoctrine()->getManager();
+
+
+			if($search != null){
+				$dql = "SELECT v FROM BackendBundle:Video v "
+						. "WHERE v.title LIKE :search OR "
+						. "v.description LIKE :search ORDER BY v.id DESC";
+				$query = $em->createQuery($dql)
+						->setParameter("search", "%$search%");
+			}else{
+				$dql = "SELECT v FROM BackendBundle:Video v ORDER BY v.id DESC";
+				$query = $em->createQuery($dql);
+			}
+
+
+			$page = $request->query->getInt("page", 1);
+			$paginator = $this->get("knp_paginator");
+			$items_per_page = 6;
+
+			$pagination = $paginator->paginate($query, $page, $items_per_page);
+			$total_items_count = $pagination->getTotalItemCount();
+
+			$data = array(
+				"status" => "success",
+				"total_items_count" => $total_items_count,
+				"page_actual" => $page,
+				"items_per_page" => $items_per_page,
+				"total_pages" => ceil($total_items_count / $items_per_page),
+				"data" => $pagination
+			);
+
+			return $helpers->json($data);
+   
+
+			//SearchAction	
+			}
 
 //FIN CLASS
 }

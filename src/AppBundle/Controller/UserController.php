@@ -81,7 +81,8 @@ class UserController extends Controller {
 		}
 
 		return $helpers->json($data);
-	}
+				//newAction
+		}
 
 	public function editAction(Request $request) {
 		//1 CARGAR SERVICIO HELPERS
@@ -172,6 +173,7 @@ class UserController extends Controller {
 				"msg" => "Authorization Not Valid"
 			);
 		}
+	//EditAction	
 	}
 
 	public function uploadImageAction(Request $request) {
@@ -243,6 +245,7 @@ class UserController extends Controller {
 		}
 
 		return $helpers->json($data);
+	//uploadImageAction	
 	}
 
 //FIN CLASS
