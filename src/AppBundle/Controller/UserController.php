@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BackendBundle\Entity\User;
-
+use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 /**
  * Description of UserController
  *
@@ -81,8 +81,8 @@ class UserController extends Controller {
 		}
 
 		return $helpers->json($data);
-				//newAction
-		}
+		//newAction
+	}
 
 	public function editAction(Request $request) {
 		//1 CARGAR SERVICIO HELPERS
@@ -173,7 +173,7 @@ class UserController extends Controller {
 				"msg" => "Authorization Not Valid"
 			);
 		}
-	//EditAction	
+		//EditAction	
 	}
 
 	public function uploadImageAction(Request $request) {
@@ -245,8 +245,57 @@ class UserController extends Controller {
 		}
 
 		return $helpers->json($data);
-	//uploadImageAction	
+		//uploadImageAction	
 	}
+	
+	
+	public function channelAction(Request $request,  $id=null){
+			$helpers = $this->get("app.helpers");
+		
+			$em = $this->getDoctrine()->getManager();
+			
+			$user	=		$em->getRepository("BackendBundle:User")->findOneBy(array(
+				"id"=>$id
+			));
+			//$video = $em->getRepository("BackendBundle:Video")->findAll();
+			$dql= "SELECT v FROM BackendBundle:Video v  "
+					. "WHERE v.user=$id "
+					. "ORDER BY v.id DESC";
+	
+			$query=$em->createQuery($dql);
+			$page=$request->query->getInt("page",	1);
+			$paginator =	$this->get("knp_paginator");
+			$items_pp=6;
+			
+			$pagination= $paginator->paginate($query,$page,$items_pp);
+			$total_items=$pagination->getTotalItemCount();
+			
+			if(count($user)){
+			$data=array(
+				"status"=>"success",
+				"total_items"=>$total_items,
+				"page_actual"=>$page,
+				"items_per_page"=>$items_pp,
+				"total_pages"=>ceil($total_items/$items_pp),
+			
+			);
+				$data["data"]["videos"]=$pagination;
+				$data["data"]["user"]=$user;
+				
+			} else {
+				$data = array(
+				"status" => "error",
+				"code" => 400,
+				"msg" => "No data from this User ID"
+			);
+				
+				
+			}
+			return $helpers->json($data);
+	//Videos Action 	
+	}
+		
+	
 
 //FIN CLASS
 }

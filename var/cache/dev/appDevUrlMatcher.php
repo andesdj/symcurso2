@@ -171,6 +171,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
             not_user_upload_image:
 
+            // user_channel
+            if (0 === strpos($pathinfo, '/user/channel') && preg_match('#^/user/channel(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_user_channel;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'user_channel')), array (  '_controller' => 'AppBundle\\Controller\\UserController::channelAction',  'id' => NULL,));
+            }
+            not_user_channel:
+
         }
 
         if (0 === strpos($pathinfo, '/video')) {
