@@ -1,0 +1,6 @@
+## YAML Template.
+---
+notification_new:
+    path:		/new
+    defaults:	{_controller:"AppBundle:notification:new"}
+    methods:	GET

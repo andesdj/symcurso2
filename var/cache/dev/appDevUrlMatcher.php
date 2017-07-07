@@ -281,6 +281,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        // notification_new
+        if ($pathinfo === '/notification/new') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_notification_new;
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\notificationController::newAction',  '_route' => 'notification_new',);
+        }
+        not_notification_new:
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }
