@@ -7,11 +7,10 @@
             <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Controller/VideoController.php</file>
             <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Resources/Config/routing.yml</file>
             <file>file:/C:/xampp/htdocs/symcurso2/app/config/services.yml</file>
+            <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Resources/Config/routing/notification.yml</file>
             <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Resources/Config/routing/video.yml</file>
-            <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Controller/UserController.php</file>
-            <file>file:/C:/xampp/htdocs/symcurso2/app/AppKernel.php</file>
-            <file>file:/C:/xampp/htdocs/symcurso2/app/config/config.yml</file>
-            <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Controller/DefaultController.php</file>
+            <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Controller/notificationController.php</file>
+            <file>file:/C:/xampp/htdocs/symcurso2/src/AppBundle/Resources/Config/routing/user.yml</file>
         </group>
     </open-files>
 </project-private>
