@@ -13,3 +13,7 @@ app_video:
 app_notification:
     resource:	"@AppBundle/Resources/config/routing/notification.yml"
     prefix:		/notification
+
+app_comment:
+    resource:	"@AppBundle/Resources/config/routing/comment.yml"
+    prefix:		/comment
