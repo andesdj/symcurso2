@@ -19,7 +19,7 @@ class Helpers {
 	public function authCheck($hash, $getIdentity = false) {
 		$jwt_auth = $this->jwt_auth;
 
-		$auth = false;
+//		$auth = false;
 		if ($hash != null) {
 			if ($getIdentity == false) {
 				$check_token = $jwt_auth->checkToken($hash);
